@@ -1,0 +1,59 @@
+<ui:composition template="template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://xmlns.jcp.org/jsf/core" 
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:b="http://bootsfaces.net/ui">
+    
+    <ui:define name="content">
+
+        <h1>Matches Page</h1>
+        
+        <b:tabView>
+            <b:tab title="View Matches" update="matchTable">
+                <h3>view matches</h3>
+                <b:dataTable id="matchTable" value="#{viewMatchesController.allMatches}" var="o">
+                    <b:dataTableColumn value="#{o.startTime}" order="asc" label="start time"></b:dataTableColumn>
+                    <b:dataTableColumn value="#{o.teamHome.teamName}" label="Home Team"></b:dataTableColumn>
+                    <b:dataTableColumn value="#{o.teamAway.teamName}" label="Away Team"></b:dataTableColumn>
+                    <b:dataTableColumn value="#{o.teamHomePoints}" label="Home Team Points"></b:dataTableColumn>
+                    <b:dataTableColumn value="#{o.teamAwayPoints}" label="Away Team Points"></b:dataTableColumn>
+                    <b:dataTableColumn orderable="false" label="Click to view match" ><input type="button" onclick="clickedMatch('#{o.id}');" value="View Match" /></b:dataTableColumn>
+                </b:dataTable>
+            </b:tab>
+            <b:tab title="Create New Match">
+                <h3>create new match</h3>
+                <b:form id="matchForm" >
+                    <b:panelGrid colSpans="2,10" size="xs" rowClasses="panelGridRows" >
+                        <h:outputText value="Match Start:" />
+                        <b:dateTimePicker value="#{newMatchController.newMatch.startTime}" render-label="true" />
+                        <h:outputText value="Home Team:" />
+                        <h:selectOneMenu value="#{newMatchController.newMatch.teamHome}" converter="#{teamConverter}">
+                            <f:selectItems value="#{newMatchController.getAllTeams()}" var="team" itemLabel="#{team.teamName}" itemValue="#{team}"/>
+                        </h:selectOneMenu>
+                        <h:outputText value="Home Team Points:"/>
+                        <h:inputText value="#{newMatchController.newMatch.teamHomePoints}"/>
+                        <h:outputText value="Away Team:"/>
+                        <h:selectOneMenu value="#{newMatchController.newMatch.teamAway}" converter="#{teamConverter}">
+                            <f:selectItems value="#{newMatchController.getAllTeams()}" var="team" itemLabel="#{team.teamName}" itemValue="#{team}"/>
+                        </h:selectOneMenu>
+                        <h:outputText value="Away Team Points:" />
+                        <h:inputText value="#{newMatchController.newMatch.teamAwayPoints}"/>
+
+
+                        <b:commandButton value="Create New Match" actionListener="#{newMatchController.createNewMatch()}" ajax="true" update="matchForm matchTable"/>
+                        
+                    </b:panelGrid>
+                    
+                </b:form>
+            </b:tab>
+            
+        </b:tabView>
+        
+        
+        
+
+        
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,4 @@
+<jboss-web>
+    <context-root>/JacobHewitt</context-root>
+<!--    <security-domain>ref</security-domain>-->
+</jboss-web>

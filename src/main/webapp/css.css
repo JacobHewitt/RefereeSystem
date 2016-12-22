@@ -1,0 +1,12 @@
+.panelGridRows{
+    margin-top: 10px;
+}
+
+h3{
+    text-align: center;
+}
+
+.clickButton{
+    cursor: pointer;
+    cursor: hand;
+}

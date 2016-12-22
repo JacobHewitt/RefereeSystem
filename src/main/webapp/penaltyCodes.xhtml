@@ -1,0 +1,42 @@
+<ui:composition template="template/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html" 
+                xmlns:f="http://xmlns.jcp.org/jsf/core" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="content">
+        <h1>Penalty Code Page</h1>
+
+        <b:tabView>
+            <b:tab title="View Penalty Codes">
+                <h3>View Penalty Codes</h3>
+                <b:dataTable id="penaltyCodeTable" value="#{newPenaltyCodeController.getAllPenaltyCodes()}" var="penaltyCode" >
+                    <b:dataTableColumn label="Code" value="#{penaltyCode.id}" />
+                    <b:dataTableColumn label="Description" value="#{penaltyCode.description}" />
+                </b:dataTable>
+
+            </b:tab>
+
+            <b:tab title="Add New Penalty Code" >
+                <h3>Add New Penalty Code</h3>
+                <b:form id="createPenaltyCodeForm">
+                    <b:panelGrid colSpans="2, 10" rowClasses="panelGridRows" >
+                        <h:outputText value="Penalty Code: " />
+                        <h:inputText value="#{newPenaltyCodeController.newPenaltyCode.id}" />
+                        
+                        <h:outputText value="Description: "/>
+                        <h:inputText value="#{newPenaltyCodeController.newPenaltyCode.description}" />
+
+                        <b:commandButton action="#{newPenaltyCodeController.createNewPenaltyCode()}" value="Create Penalty Code" ajax="true" update="penaltyCodeTable createPenaltyCodeForm"/>
+
+                    </b:panelGrid>
+                </b:form>
+            </b:tab>
+        </b:tabView>
+
+
+
+
+    </ui:define>
+</ui:composition>

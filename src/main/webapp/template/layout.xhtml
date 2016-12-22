@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      >
+
+    <h:head>
+        <link type="text/css" rel="stylesheet" href="css.css" />
+        <script src="js.js" type="text/javascript" />
+        <title>Referee System</title>
+    </h:head>
+
+    <h:body>
+
+        <b:container>
+            <b:row styleClass="show-grid">
+                    <ui:insert name="header" >
+                        <ui:include src="/template/header.xhtml" />
+                    </ui:insert>
+            </b:row>
+            
+            
+            
+            <ui:insert name="content" >
+                <ui:include src="/template/content.xhtml" />
+            </ui:insert>
+            
+            
+            
+            <b:row styleClass="show-grid">
+                <b:column span="12">
+                    <ui:insert name="footer" >
+                        <ui:include src="/template/footer.xhtml" />
+                    </ui:insert>
+                </b:column>
+            </b:row>
+
+        </b:container>
+
+    </h:body>
+</html>

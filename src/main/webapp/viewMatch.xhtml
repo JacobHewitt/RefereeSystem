@@ -1,0 +1,107 @@
+<ui:composition template="template/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html" 
+                xmlns:f="http://xmlns.jcp.org/jsf/core" 
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="id" value="#{viewMatchController.id}" />
+            <f:viewAction action="#{viewMatchController.onLoad}" />
+        </f:metadata>
+
+        <h3>#{viewMatchController.match.teamHome} VS #{viewMatchController.match.teamAway}</h3>
+        <h4>#{viewMatchController.match.startTime}</h4>
+
+        <b:panelGrid colSpans="6,6" >
+            <b:panelGrid colSpans="6,6" rowClasses="panelGridRows">
+                <h:outputText value="Home Team:" />
+                <h:outputText value="#{viewMatchController.match.teamHome}" />
+                <h:outputText value="Home Team Points: "/>
+                <h:outputText value="#{viewMatchController.match.teamHomePoints}" />
+            </b:panelGrid>
+            <b:panelGrid colSpans="6,6" rowClasses="panelGridRows">
+                <h:outputText value="Away Team:" />
+                <h:outputText value="#{viewMatchController.match.teamAway}" />
+                <h:outputText value="Away team Points: "/>
+                <h:outputText value="#{viewMatchController.match.teamAwayPoints}" />
+            </b:panelGrid>
+
+
+        </b:panelGrid>
+
+        <b:dataTable id="foulTable" value="#{viewMatchController.match.fouls}" var="foul" >
+            <b:dataTableColumn label="Interval" value="#{foul.interval}" />
+            <b:dataTableColumn label="Time In Interval" value="#{foul.time}" />
+            <b:dataTableColumn label="Penalty Code" value="#{foul.penaltyCode}" />
+            <h:column>
+                <f:facet name="header"><h:outputText value="Referees" /></f:facet>
+                <ui:repeat value="#{foul.referees}" var="ref" >
+                    <h:outputText value="#{ref.toString()}" />
+                </ui:repeat>
+            </h:column>
+        </b:dataTable>
+
+        <b:form id="createNewFoulForm" >
+            <b:panelGrid colSpans="3,9" rowClasses="panelGridRows">
+                <h:outputText value="Penalty Code: " />
+                <h:selectOneMenu value="#{viewMatchController.newFoul.penaltyCode}" converter="#{penaltyCodeConverter}" >
+                    <f:selectItems value="#{viewMatchController.allPenaltyCodes}" var="penaltyCode" itemLabel="#{penaltyCode.id}" itemValue="#{penaltyCode}"/>
+                </h:selectOneMenu>
+
+                <h:outputText value="Referee/s: " />
+
+                <h:panelGrid id="refereeTable">
+
+                    <ui:repeat  value="#{viewMatchController.referees}" var="referee" >
+
+                        <h:selectOneMenu value="#{referee}" converter="#{refereeConverter}">
+                            <f:selectItems value="#{viewMatchController.allReferees}" var="ref" itemLabel="#{ref.toString()}" itemValue="#{ref}" />
+                        </h:selectOneMenu>
+
+
+
+                    </ui:repeat>
+
+                    <h:commandButton value="Add Additional Referee">
+                        <f:ajax listener="#{viewMatchController.addReferee()}" render="refereeTable" />
+                    </h:commandButton>
+
+                    <h:commandButton value="Reset Referees" >
+                        <f:ajax listener="#{viewMatchController.resetReferees()}" render="refereeTable" />
+                    </h:commandButton>
+
+
+                </h:panelGrid>
+
+
+                <h:outputText value="Interval In Match:" />
+                <h:selectOneMenu value="#{viewMatchController.newFoul.interval}" converter="javax.faces.Integer">
+                    <f:selectItem itemValue="1" itemLabel="1"/>
+                    <f:selectItem itemValue="2" itemLabel="2"/>
+                    <f:selectItem itemValue="3" itemLabel="3"/>
+                    <f:selectItem itemValue="4" itemLabel="4"/>
+                </h:selectOneMenu>
+
+
+
+                <h:outputText value="Minutes " />
+                <h:inputText value="#{viewMatchController.newFoul.timeMinutes}" required="true" />
+                <h:outputText value="Seconds " />
+                <h:inputText value="#{viewMatchController.newFoul.timeSeconds}" required="true" />
+
+
+            </b:panelGrid>
+            <h:commandButton value="Add new Foul" >
+                <f:ajax listener="#{viewMatchController.addNewFoul()}" render="createNewFoulForm foulTalbe" />
+            </h:commandButton>
+            <h:messages/>
+        </b:form>
+
+
+
+    </ui:define>
+</ui:composition>
