@@ -44,8 +44,7 @@ public class RefereeEntity implements Serializable {
     
     private String organisation;
     
-    @ManyToMany
-    @JoinTable(name="refereeFouls")
+    @ManyToMany(mappedBy="referees")
     private List<FoulEntity> fouls;
     
     public void setFouls(List<FoulEntity> fouls){
