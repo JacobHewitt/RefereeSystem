@@ -6,6 +6,7 @@
 package com.mycompany.jacobhewitt.persistence;
 
 import com.mycompany.jacobhewitt.entitys.RefereeEntity;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,7 +31,12 @@ public class RefereeEntityFacade extends AbstractFacade<RefereeEntity> {
     }
 
     public RefereeEntity getRefereeById(Long id) {
-        return (RefereeEntity) em.createNamedQuery("findRefereeById").setParameter("id", id).getSingleResult();
+        List<RefereeEntity> toReturn = em.createNamedQuery("findRefereeById").setParameter("id", id).getResultList();
+        if(toReturn.size() > 0){
+            return toReturn.get(0);
+        }else{
+            return null;
+        }
     }
     
 }

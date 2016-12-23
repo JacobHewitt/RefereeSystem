@@ -1,6 +1,5 @@
 
 function clickedMatch(id){
-    alert(id);
     location.href="http://localhost:8080/JacobHewitt/viewMatch.xhtml?id="+id;
 }
 

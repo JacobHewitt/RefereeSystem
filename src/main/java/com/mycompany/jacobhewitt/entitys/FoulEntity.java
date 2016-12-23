@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -42,7 +44,10 @@ public class FoulEntity implements Serializable {
     @ManyToOne
     private MatchEntity matchEntity;
     
-    @ManyToMany(mappedBy = "fouls")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "REF_FOULS",
+        joinColumns = @JoinColumn(name = "foulId", referencedColumnName="id"),
+        inverseJoinColumns = @JoinColumn(name = "refereeId", referencedColumnName="id"))
     private List<RefereeEntity> referees;
     
     @ManyToOne
@@ -55,7 +60,7 @@ public class FoulEntity implements Serializable {
     private int interval;
     
     private int timeMinutes, timeSeconds;
-
+    
     public int getInterval() {
         return interval;
     }
@@ -138,11 +143,21 @@ public class FoulEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Penalty[ id=" + id + " ]";
+        String toReturn = id+" "+penaltyCode+" "+interval+" "+timeToString();
+        if(referees!=null && !referees.isEmpty()){
+            toReturn+=referees.toString();
+        }else{
+            toReturn+=" NO REFEREES";
+        }
+        return toReturn;
     }
 
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
+    }
+    
+    public String timeToString(){
+        return timeMinutes+":"+timeSeconds;
     }
     
     
