@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +31,8 @@ import javax.persistence.Table;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="findFoulsFromMatchId", query="SELECT fouls FROM FoulEntity fouls WHERE fouls.matchEntity = :id")
+    @NamedQuery(name="findFoulsFromMatchId", query="SELECT fouls FROM FoulEntity fouls WHERE fouls.matchEntity = :id"),
+    @NamedQuery(name="findFoulFromId", query="SELECT foul FROM FoulEntity foul WHERE foul.id = :id")
 })
 public class FoulEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -53,13 +56,22 @@ public class FoulEntity implements Serializable {
     @ManyToOne
     private PenaltyCodeEntity penaltyCode;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="foul")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="foul",orphanRemoval=true)
     private List<CommentEntity> comments;
     
     @Column(name="intervalInMatch")
     private int interval;
     
     private int timeMinutes, timeSeconds;
+    
+    @Enumerated(EnumType.STRING)
+    private JUDGEMENT judgement;
+    
+    private UserEntity userWhoJudged;
+    
+    public JUDGEMENT[] getJudgements(){
+        return JUDGEMENT.values();
+    }
     
     public int getInterval() {
         return interval;
@@ -120,6 +132,24 @@ public class FoulEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public JUDGEMENT getJudgement() {
+        return judgement;
+    }
+
+    public void setJudgement(JUDGEMENT judgement) {
+        this.judgement = judgement;
+    }
+
+    public UserEntity getUserWhoJudged() {
+        return userWhoJudged;
+    }
+
+    public void setUserWhoJudged(UserEntity userWhoJudged) {
+        this.userWhoJudged = userWhoJudged;
+    }
+    
+    
 
     @Override
     public int hashCode() {
